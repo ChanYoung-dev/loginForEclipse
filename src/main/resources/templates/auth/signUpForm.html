@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>SK</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+</head>
+<body>
+<div class="container mt-2">
+    <div class="row">
+        <div class="col-md-3">
+        </div>
+        <div class="col-md-6">
+            <h1>회원가입</h1>
+            <form name="signUpForm" class="form-group" method="post"> <!-- 요청 보내기-->
+
+                <div class="pb-3">
+                    <label for="id" class="sr-only">아이디</label>
+                    <input type="text" id="id" name="id" class="form-control" required oninput="checkId()">
+                    <div class="invalid-feedback">
+                        사용 불가능, 혹은 중복된 아이디입니다.
+                    </div>
+                    <div class="valid-feedback">
+                        사용 가능한 아이디입니다.
+                    </div>
+                </div>
+
+                <div class="pb-3">
+                    <label for="name" class="sr-only">이름</label>
+                    <input type="text" id="name" name="name" class="form-control" required oninput="checkName()">
+                    <div class="invalid-feedback">
+                        이름을 입력해주세요.
+                    </div>
+                    <div class="valid-feedback">
+                    </div>
+                </div>
+
+
+                <div class="pb-3">
+                    <label for="email" class="sr-only">이메일</label>
+                    <input type="text" id="email" name="email" class="form-control" required oninput="checkEmail()">
+                    <div class="invalid-feedback">
+                        사용 불가능, 혹은 중복된 이메일입니다.
+                    </div>
+                    <div class="valid-feedback">
+                        사용 가능한 이메일입니다.
+                    </div>
+                </div>
+
+                <div class="pb-3">
+                    <label for="password" class="sr-only">비밀번호</label>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="비밀번호" required oninput="checkPassword()">
+                    <div class="invalid-feedback">
+                        비밀번호 불일치
+                    </div>
+                    <div class="valid-feedback">
+                        사용 가능한 비밀번호입니다.
+                    </div>
+                </div>
+
+                <div class="pb-3">
+                    <label for="password" class="sr-only">비밀번호 확인</label>
+                    <input type="password" id="password_confirm" name="password_confirm" class="form-control" placeholder="비밀번호 확인" required oninput="checkPassword()">
+                </div>
+            </form>
+            <button class="btn btn-lg btn-primary mt-3" onclick="signUp()">Sign Up</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript" th:inline="javascript">
+    let emailRegExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[0-9a-zA-Z]{2,5}$/gi;
+    let idRegExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*$/gi;
+    let nameClassList = document.querySelector('#name').classList;
+    let emailClassList = document.querySelector('#email').classList;
+    let idClassList = document.querySelector('#id').classList;
+    let passwordClassList = document.querySelector('#password').classList;
+    let nameResult = false;
+    let idResult = false;
+    let emailResult = false;
+    let passwordResult = false;
+
+    function checkName() {
+        let name = $('#name').val();
+
+        if (name=="") {
+            checkNameResult(false);
+        } else {
+            checkNameResult(true);
+        }
+        console.log(name);
+    }
+
+
+    function checkEmail() {
+        let email = $('#email').val();
+        console.log(email);
+
+        if (email.match(emailRegExp) == null) {
+            checkEmailResult(false);
+            return;
+        }
+
+        let emailValidationRequestDto = JSON.stringify({
+            email: email
+        });
+
+        $.ajax({
+            url: '/auth/email-validation',
+            type: 'post',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: emailValidationRequestDto,
+            statusCode: {
+                200: function () {
+                    checkEmailResult(true);
+                },
+                409: function () {
+                    checkEmailResult(false);
+                },
+                500: function () {
+                    alert("다시 시도해주세요.");
+                    checkEmailResult(false);
+                }
+            }
+        });
+
+    }
+
+    function checkId() {
+        let id = $('#id').val();
+
+
+        if (id.match(idRegExp) == null) {
+            checkIdResult(false);
+            return;
+        }
+
+        let idValidationRequestDto = JSON.stringify({
+            id: id
+        });
+
+        $.ajax({
+            url: '/auth/id-validation',
+            type: 'post',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: idValidationRequestDto,
+            statusCode: {
+                200: function () {
+                    checkIdResult(true);
+                },
+                409: function () {
+                    checkIdResult(false);
+                },
+                500: function () {
+                    alert("다시 시도해주세요.");
+                    checkIdResult(false);
+                }
+            }
+        });
+    }
+
+    function checkPassword() {
+        let password = $('#password').val();
+        let passwordConfirm = $('#password_confirm').val();
+
+        console.log(password);
+
+        if (!password || password == passwordConfirm) {
+            passwordClassList.add("is-valid");
+            passwordClassList.remove("is-invalid");
+            passwordResult = true;
+        } else {
+            passwordClassList.add("is-invalid");
+            passwordClassList.remove("is-valid");
+            passwordResult = false;
+        }
+    }
+
+
+    function signUp(){
+        if (idResult && nameResult && emailResult && passwordResult) {
+            let SignUpRequestDto = JSON.stringify({
+                id: $('#id').val(),
+                name: $('#name').val(),
+                mail: $('#email').val(),
+                password: $('#password').val()
+            });
+
+            $.ajax({
+                url: '/auth/sign-up',
+                type: 'post',
+                dataType: 'json',
+                contentType: 'application/json',
+                data: SignUpRequestDto,
+                statusCode: {
+                    201:function(){
+                        alert("회원가입이 정상적으로 완료되었습니다.");
+                        location.replace("http://localhost:8080/member/my-page");
+                    },
+                    500: function (err) {
+                        alert("잠시 후 다시 시도해주세요.");
+                    }
+                }
+            })
+        } else {
+            alert("필요한 부분을 모두 채워주세요.");
+        }
+    }
+
+    function checkNameResult(result){
+        if(result == true){
+            nameClassList.add("is-valid");
+            nameClassList.remove("is-invalid");
+            nameResult = true;
+        } else if(result == false){
+            nameClassList.add("is-invalid");
+            nameClassList.remove("is-valid");
+            nameResult = false;
+        }
+    }
+
+    function checkEmailResult(result){
+        if (result == true) {
+            emailClassList.add("is-valid");
+            emailClassList.remove("is-invalid");
+            emailResult = true;
+        }else if (result == false) {
+            emailClassList.add("is-invalid");
+            emailClassList.remove("is-valid");
+            emailResult = false;
+        }
+    }
+
+    function checkIdResult(result){
+        if (result == true) {
+            idClassList.add("is-valid");
+            idClassList.remove("is-invalid");
+            idResult = true;
+        }else if (result == false) {
+            idClassList.add("is-invalid");
+            idClassList.remove("is-valid");
+            idResult = false;
+        }
+    }
+</script>

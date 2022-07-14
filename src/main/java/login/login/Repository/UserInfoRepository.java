@@ -29,4 +29,14 @@ public class UserInfoRepository {
 	public UserInfo findMember(String userId){
 		return em.createQuery("select i from UserAccount u join u.userInfo i where u.userInfo.id = :userId", UserInfo.class).setParameter("userId", userId).getSingleResult();
 	}
+
+	public Boolean existsByEmail(String mail) {
+		String qlString = "select case when (count(i) > 0) then true else false end from UserInfo i where i.mail = :mail";
+		return em.createQuery(qlString, Boolean.class).setParameter("mail", mail).getSingleResult();
+	}
+
+	public Boolean existsById(String userId) {
+		String qlString = "select case when (count(i) > 0) then true else false end from UserInfo i where i.userId = :userId";
+		return em.createQuery(qlString, Boolean.class).setParameter("userId", userId).getSingleResult();
+	}
 }
