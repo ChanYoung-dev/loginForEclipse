@@ -22,4 +22,5 @@ public class UserAccountRepository {
 	public UserAccount findByUserId(String userId){
 		return em.createQuery("select u from UserAccount u where u.userInfo.id = :userId", UserAccount.class).setParameter("userId", userId).getSingleResult();
 	}
+
 }
