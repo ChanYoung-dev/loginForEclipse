@@ -25,7 +25,7 @@ public class UserAccountService {
 	@Transactional
 	public void register(String userId, String userPassword, String name, String email) {
 		UserInfo userInfo = UserInfo.createUserInfo(userId, name, email);
-		UserAccount userAccount = UserAccount.createUserAccount(userPassword, userInfo);
+		UserAccount userAccount = UserAccount.createUserAccount(userId, userPassword, userInfo);
 		userInfoRepository.save(userInfo);
 		userAccountRepository.save(userAccount);
 	}

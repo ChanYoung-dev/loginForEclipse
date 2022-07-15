@@ -12,8 +12,8 @@ public class LoginRequestDto {
     String password;
     boolean error = false;
 
-    public LoginRequestDto(String email, String password, boolean error) {
-        this.id = email;
+    public LoginRequestDto(String id, String password, boolean error) {
+        this.id = id;
         this.password = password;
         this.error = error;
     }

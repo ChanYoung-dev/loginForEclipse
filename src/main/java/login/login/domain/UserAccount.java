@@ -19,7 +19,7 @@ public class UserAccount {
 	private Long id;
 
 	@Column(nullable = false)
-	private Long userId; // 사용자 식별자
+	private String userId; // 사용자 식별자
 	
 	private String userPassword;
 
@@ -41,10 +41,12 @@ public class UserAccount {
 
 
 
-	public static UserAccount createUserAccount(String userPassword, UserInfo userInfo) {
+	public static UserAccount createUserAccount(String userId, String userPassword, UserInfo userInfo) {
 		UserAccount userAccount = new UserAccount();
+		userAccount.userId = userId;
 		userAccount.userPassword= userPassword;
 		userAccount.setUserInfo(userInfo);
+		userAccount.setLoginYN("Y");
 		return userAccount;
 	}
 

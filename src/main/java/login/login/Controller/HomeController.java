@@ -26,7 +26,7 @@ public class HomeController {
         }
 
         //세션이 유지되면 로그인으로 이동
-        UserInfo userinfo = userInfoRepository.findMember(loginMember.getUserInfo().getEmail());
+        UserInfo userinfo = userInfoRepository.findMember(loginMember.getUserId());
         //이름찾기
 //        String userName = userAccountAPI.requestName(loginMember.getUserInfo().getUserId());
         model.addAttribute("memberName",userinfo.getUserName());
