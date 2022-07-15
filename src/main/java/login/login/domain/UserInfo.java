@@ -17,16 +17,16 @@ public class UserInfo {
 	
 	private String userName;
 	
-	private String mail;
+	private String email;
 
 	@OneToOne(mappedBy = "userInfo", fetch = FetchType.LAZY)
 	private UserAccount userAccount;
 
-	public static UserInfo createUserInfo(String userId, String userName, String mail) {
+	public static UserInfo createUserInfo(String userId, String userName, String email) {
 		UserInfo userInfo = new UserInfo();
 		userInfo.userId = userId;
 		userInfo.userName = userName;
-		userInfo.mail= mail;
+		userInfo.email= email;
 		return userInfo;
 	}
 }

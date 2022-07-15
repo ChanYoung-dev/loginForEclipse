@@ -1,6 +1,7 @@
 package login.login.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -18,7 +19,7 @@ public class UserAccount {
 	private Long id;
 	
 	private String userPassword;
-	
+
 	private String loginYN;
 
 

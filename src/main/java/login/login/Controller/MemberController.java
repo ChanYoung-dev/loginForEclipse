@@ -26,7 +26,7 @@ public class MemberController {
     @GetMapping("/my-page")
     public String info(HttpServletResponse response, Model model) {
         UserInfo userinfo = userInfoRepository.findMember("emrhssla");
-        MemberInfo memberInfo = new MemberInfo(userinfo.getMail(), userinfo.getUserName());
+        MemberInfo memberInfo = new MemberInfo(userinfo.getEmail(), userinfo.getUserName());
         model.addAttribute(memberInfo);
         return "my-page";
     }

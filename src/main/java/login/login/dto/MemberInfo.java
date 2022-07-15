@@ -9,13 +9,13 @@ import lombok.Setter;
 @NoArgsConstructor
 public class MemberInfo {
 
-    String mail;
+    String email;
 
     String name;
 
 
-    public MemberInfo(String mail, String name) {
-        this.mail = mail;
+    public MemberInfo(String email, String name) {
+        this.email = email;
         this.name = name;
     }
 }

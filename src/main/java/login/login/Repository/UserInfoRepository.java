@@ -30,9 +30,9 @@ public class UserInfoRepository {
 		return em.createQuery("select i from UserAccount u join u.userInfo i where u.userInfo.id = :userId", UserInfo.class).setParameter("userId", userId).getSingleResult();
 	}
 
-	public Boolean existsByEmail(String mail) {
-		String qlString = "select case when (count(i) > 0) then true else false end from UserInfo i where i.mail = :mail";
-		return em.createQuery(qlString, Boolean.class).setParameter("mail", mail).getSingleResult();
+	public Boolean existsByEmail(String email) {
+		String qlString = "select case when (count(i) > 0) then true else false end from UserInfo i where i.email = :email";
+		return em.createQuery(qlString, Boolean.class).setParameter("email", email).getSingleResult();
 	}
 
 	public Boolean existsById(String userId) {
