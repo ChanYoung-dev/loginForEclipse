@@ -18,7 +18,7 @@ public class UserInfoRepository {
 
 	private final EntityManager em;
 
-	public UserInfo findUser(Long id) {
+	public UserInfo findUserById(String id) {
 		return em.find(UserInfo.class, id);
 	}
 	

@@ -1,10 +1,14 @@
 package login.login.dto;
 
+import lombok.Data;
 import lombok.Getter;
 
-@Getter
+@Data
 public class ResponseUserName {
     String name;
+
+    public ResponseUserName() {
+    }
 
     public ResponseUserName(String name) {
         this.name = name;

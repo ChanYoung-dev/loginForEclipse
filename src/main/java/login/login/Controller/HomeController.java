@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HomeController {
 
     private final UserInfoRepository userInfoRepository;
-//    private final UserAccountAPI userAccountAPI;
+    private final UserAccountAPI userAccountAPI;
 
     @GetMapping("/")
     public String home(@Login UserAccount loginMember, Model
@@ -28,7 +28,8 @@ public class HomeController {
         //세션이 유지되면 로그인으로 이동
         UserInfo userinfo = userInfoRepository.findMember(loginMember.getUserId());
         //이름찾기
-//        String userName = userAccountAPI.requestName(loginMember.getUserInfo().getUserId());
+        String userName = userAccountAPI.requestName(loginMember.getUserInfo().getUserId());
+        System.out.println("userName = " + userName);
         model.addAttribute("memberName",userinfo.getUserName());
         return "home-member";
     }
