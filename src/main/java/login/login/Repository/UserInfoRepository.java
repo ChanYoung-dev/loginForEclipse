@@ -39,4 +39,6 @@ public class UserInfoRepository {
 		String qlString = "select case when (count(i) > 0) then true else false end from UserInfo i where i.userId = :userId";
 		return em.createQuery(qlString, Boolean.class).setParameter("userId", userId).getSingleResult();
 	}
+
+
 }

@@ -47,11 +47,12 @@
 </html>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script type="text/javascript" th:inline="javascript">
-    let serverDomain = "http://localhost:8080"
+    let serverDomain = [[${serverDomain}]];
     /*<![CDATA[*/
     if([[${redirectURL}]] != null){
       serverDomain += [[${redirectURL}]];
     }
+    console.log(serverDomain)
     /*]]>*/
     $('#unableLogin').hide();
     $('#logout').hide();
@@ -62,7 +63,7 @@
         });
 
         $.ajax({
-            url: '/login',
+            url: '/auth/login',
             type: 'post',
             dataType: 'json',
             contentType: 'application/json',

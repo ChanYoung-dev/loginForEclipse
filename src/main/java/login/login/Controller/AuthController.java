@@ -7,6 +7,7 @@ import login.login.Repository.UserInfoRepository;
 import login.login.domain.UserAccount;
 import login.login.domain.UserInfo;
 import login.login.dto.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -24,46 +25,41 @@ import javax.servlet.http.HttpSession;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/auth")
 public class AuthController {
 
-	private final UserInfoService userInfoService;
+	@Value("${msa.domain}")
+	String serverDomain;
 
+	@Value("${msa.auth}")
+	String serverAuth;
+
+	@Value("${msa.member}")
+	String serverMember;
+
+	private final UserInfoService userInfoService;
 	private final UserInfoRepository userInfoRepository;
 	private final UserAccountService userAccountService;
 	private final UserAccountRepository userAccountRepository;
 
-	@GetMapping("/")
-	public String home(@Login UserAccount loginMember, Model
-			model) {
-		//세션에 회원 데이터가 없으면 home
-		if (loginMember == null) {
-			return "home-guest";
-		}
 
-		//세션이 유지되면 로그인으로 이동
-		UserInfo userinfo = userInfoRepository.findMember(loginMember.getUserInfo().getUserId());
-		model.addAttribute("memberName",userinfo.getUserName());
-		return "home-member";
-	}
 
-	@PostMapping("/test")
+	@GetMapping("/test")
 	@ResponseBody
-	public ResponseEntity test() {
-		System.out.println("success");
-		return ResponseEntity.status(HttpStatus.OK).build();
-	}
-
-	@GetMapping("/test2")
-	@ResponseBody
-	public String test2() {
-		UserAccount emrhssla = userAccountRepository.findByUserId("emrhssla");
-		System.out.println("emrhssla = " + emrhssla);
-		return "success";
+	public String test() {
+		UserAccount userAccount = userAccountRepository.findUser(1L);
+		//UserInfo userinfo = userInfoRepository.findMember(loginMember.getUserInfo().getEmail());
+		//UserInfo userinfo = userInfoRepository.findMember(userAccount.getUserInfo().getUserId());
+		//System.out.println("userAccount.getUserInfo().getUserId() = " + userAccount.get;
+		return "hi";
 	}
 
 	@GetMapping("/login")
-	public String loginForm(Model model, @RequestParam(required = false) String redirectURL) {
-		System.out.println("redirectURL = " + redirectURL);
+	public String loginForm(@Login UserAccount userAccount, Model model, @RequestParam(required = false) String redirectURL) {
+		if(userAccount != null){
+			return "redirect:/";
+		}
+		model.addAttribute("serverDomain", serverDomain);
 		model.addAttribute("redirectURL",redirectURL);
 		return "loginForm";
 	}
@@ -79,18 +75,19 @@ public class AuthController {
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 
-	@GetMapping("/auth/sign-up")
+	@GetMapping("/sign-up")
 	public String signUpForm(Model model){
+		model.addAttribute("serverAuth",serverAuth);
 		return "auth/signUpForm";
 	}
 
-	@PostMapping("/auth/sign-up")
+	@PostMapping("/sign-up")
 	public ResponseEntity signUp(@RequestBody SignUpRequestDto dto){
 		userAccountService.register(dto.getId(), dto.getPassword(), dto.getName(), dto.getEmail());
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
-	@PostMapping("/auth/email-validation")
+	@PostMapping("/email-validation")
 	public ResponseEntity emailValidation(@RequestBody EmailValidationRequestDto dto) {
 		if (userInfoService.isEmailDuplicated(dto.getEmail())) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
@@ -99,29 +96,13 @@ public class AuthController {
 		}
 	}
 
-	@PostMapping("/auth/id-validation")
+	@PostMapping("/id-validation")
 	public ResponseEntity idValidation(@RequestBody IdValidationRequestDto dto) {
 		if (userInfoService.isIdDuplicated(dto.getId())) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
 		} else {
 			return ResponseEntity.status(HttpStatus.OK).build();
 		}
-	}
-
-
-	//@GetMapping("/")
-	public String homeLoginV3ArgumentResolver(@Login UserAccount loginMember, Model
-			model) {
-		//세션에 회원 데이터가 없으면 home
-		if (loginMember == null) {
-			return "loginForm";
-		}
-
-		//세션이 유지되면 로그인으로 이동
-		UserInfo userinfo = userInfoRepository.findMember(loginMember.getUserInfo().getUserId());
-		MemberInfo memberInfo = new MemberInfo(userinfo.getEmail(), userinfo.getUserName());
-		model.addAttribute(memberInfo);
-		return "redirect:/member/my-page";
 	}
 
 	@PostMapping("/logout")

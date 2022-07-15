@@ -25,16 +25,15 @@
 </body>
 </html>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script type="text/javascript">
-
-
+<script type="text/javascript" th:inline="javascript">
+    console.log(serverDomain)
     function requestLogout() {
         $.ajax({
             type: "POST",
-            url: '/logout',
+            url: '/auth/logout',
             statusCode: {
                 200: function () {
-                    location.replace("http://localhost:8080/");
+                    location.replace([[${serverDomain}]]);
                 },
                 500: function () {
                     alert("잠시 후 다시 시도해주세요.");

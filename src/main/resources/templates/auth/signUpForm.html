@@ -180,6 +180,7 @@
         }
     }
 
+    console.log([[${serverMember}]])
 
     function signUp(){
         if (idResult && nameResult && emailResult && passwordResult) {
@@ -190,6 +191,7 @@
                 password: $('#password').val()
             });
 
+
             $.ajax({
                 url: '/auth/sign-up',
                 type: 'post',
@@ -199,7 +201,8 @@
                 statusCode: {
                     201:function(){
                         alert("회원가입이 정상적으로 완료되었습니다.");
-                        location.replace("http://localhost:8080/member/my-page");
+                        //location.replace("http://localhost:8081/member/my-page");
+                        location.replace([[${serverAuth}]] + "/login");
                     },
                     500: function (err) {
                         alert("잠시 후 다시 시도해주세요.");

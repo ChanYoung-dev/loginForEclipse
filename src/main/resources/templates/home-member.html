@@ -37,11 +37,21 @@
   let num = 1;
   console.log("test start", num);
   let passwordClassList = document.querySelector('#h1');
+  // $(window).on('mouseover', (function () {
+  //   window.onbeforeunload=closePage;
+  //   console.log("새로고침");
+  //   alert('새로고침');  // 새로고침
+  // }));
+  // $(window).on('mouseout', (function () {
+  //
+  //   console.log("닫기");
+  //   alert('닫기');  // 새로고침
+  // }));
   function closePage(){
     console.log("hi");
     num = 2
     console.log("closing start", num);
-    passwordClassList.innerHTML = "hello";
+    passwordClassList.innerHTML = "Processing.........";
     if(self.screenTop > 9000)
     {
       // $.ajax({
@@ -49,7 +59,7 @@
       //   url: '/logout',
       //   statusCode: {
       //     200: function () {
-      //       //location.replace("http://localhost:8080/");
+      //       //location.replace("http://localhost:8081/");
       //     },
       //     500: function () {
       //       alert("잠시 후 다시 시도해주세요.");
@@ -61,20 +71,21 @@
     {
       if(document.readyState == "complete")
       {
-        console.log("새로고침");
-        alert('새로고침');  // 새로고침
-        $.ajax({
-          type: "POST",
-          url: '/logout',
-          statusCode: {
-            200: function () {
-              //location.replace("http://localhost:8080/");
-            },
-            500: function () {
-              alert("잠시 후 다시 시도해주세요.");
+
+          console.log("새로고침");
+          alert('새로고침');  // 새로고침
+          $.ajax({
+            type: "POST",
+            url: '/auth/logout',
+            statusCode: {
+              200: function () {
+                //location.replace("http://localhost:8081/");
+              },
+              500: function () {
+                alert("잠시 후 다시 시도해주세요.");
+              }
             }
-          }
-        });
+          });
       }
       else if(document.readyState == "loading")
       {
@@ -85,7 +96,5 @@
 
   }
 </script>
-<script language="javascript" event="onunload" for="window">
-  Exit();
-</script>
+
 

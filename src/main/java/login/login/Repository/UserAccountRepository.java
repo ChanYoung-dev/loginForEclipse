@@ -26,6 +26,10 @@ public class UserAccountRepository {
 		return em.createQuery("select u from UserAccount u where u.userInfo.id = :userId", UserAccount.class).setParameter("userId", userId).getSingleResult();
 	}
 
+	public UserAccount findUser(Long id) {
+		return em.find(UserAccount.class, id);
+	}
+
 
 
 }

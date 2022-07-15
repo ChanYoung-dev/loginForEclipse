@@ -17,6 +17,9 @@ public class UserAccount {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	@Column(nullable = false)
+	private Long userId; // 사용자 식별자
 	
 	private String userPassword;
 
@@ -24,7 +27,11 @@ public class UserAccount {
 
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id")
+	@JoinColumn(
+			name = "userId",
+			insertable = false,
+			updatable = false
+	)
 	private UserInfo userInfo;
 
 	public void setUserInfo(UserInfo userInfo) {
