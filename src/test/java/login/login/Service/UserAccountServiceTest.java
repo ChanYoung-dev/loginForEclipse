@@ -1,25 +1,23 @@
 package login.login.Service;
 
-import login.login.Repository.UserAccountRepository;
-import login.login.domain.UserAccount;
+import login.login.UserAccount.Repository.UserAccountRepository;
+import login.login.UserAccount.Service.UserAccountService;
+import login.login.UserAccount.domain.UserAccount;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.event.EventListener;
 import org.springframework.test.annotation.Commit;
 
 import javax.transaction.Transactional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 
 @SpringBootTest
 @Transactional
 class UserAccountServiceTest {
 
-    @Autowired UserAccountService userAccountService;
+    @Autowired
+    UserAccountService userAccountService;
     @Autowired
     UserAccountRepository userAccountRepository;
 
