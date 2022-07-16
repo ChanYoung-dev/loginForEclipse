@@ -19,7 +19,7 @@
     <h1 id="h1">안녕하세요!</h1>
     <p class="lead" th:text="${memberName}+' 님 반갑습니다'"></p>
     <p class="lead">
-      <a href="#" th:onclick="|location.href='@{/member/my-page}'|" class="btn btn-lg btn-secondary fw-bold border-white bg-white">내 정보 보기</a>
+      <a href="#" th:onclick="|location.href='@{/member/{memberId}/my-page(memberId=${memberId})}'|" class="btn btn-lg btn-secondary fw-bold border-white bg-white">내 정보 보기</a>
     </p>
   </main>
 

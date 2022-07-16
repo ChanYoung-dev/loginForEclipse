@@ -3,6 +3,7 @@ package login.login.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
+import login.login.API.UserAccountAPI;
 import login.login.Exception.LoginException;
 import login.login.dto.LoginRequestDto;
 import org.springframework.stereotype.Repository;
@@ -15,18 +16,20 @@ import login.login.domain.UserAccount;
 import login.login.domain.UserInfo;
 import lombok.RequiredArgsConstructor;
 
+import java.util.regex.Pattern;
+
 @Service
 @RequiredArgsConstructor
 public class UserAccountService {
 	
 	private final UserAccountRepository userAccountRepository;
-	private final UserInfoRepository userInfoRepository;
+
+	private final UserAccountAPI userAccountAPI;
 
 	@Transactional
 	public void register(String userId, String userPassword, String name, String email) {
-		UserInfo userInfo = UserInfo.createUserInfo(userId, name, email);
+		UserInfo userInfo = userAccountAPI.requestSignUp(userId, name, email);
 		UserAccount userAccount = UserAccount.createUserAccount(userId, userPassword, userInfo);
-		userInfoRepository.save(userInfo);
 		userAccountRepository.save(userAccount);
 	}
 
@@ -53,6 +56,18 @@ public class UserAccountService {
 		userAccountRepository.save(userAccount);
 		System.out.println("Logyn = " + userAccount.getLoginYN());
 	}
+
+	@Transactional
+	public boolean isIdDuplicated(String id) {
+		String regExpression = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*$";
+
+		if (!Pattern.matches(regExpression, id)) {
+			throw new RuntimeException("아이디가 올바르지 않습니다.");
+		}
+
+		return userAccountRepository.existsById(id);
+	}
+
 
 
 

@@ -3,10 +3,7 @@ package login.login.Controller;
 import login.login.Exception.LoginException;
 import login.login.LoginAnnotation.Login;
 import login.login.Repository.UserAccountRepository;
-import login.login.Repository.UserInfoRepository;
 import login.login.domain.UserAccount;
-import login.login.domain.UserInfo;
-import login.login.domain.UserInfoDto;
 import login.login.dto.*;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -19,7 +16,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import login.login.Service.UserAccountService;
-import login.login.Service.UserInfoService;
 //import login.domain.UserAccount;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,8 +36,6 @@ public class AuthController {
 	@Value("${msa.member}")
 	String serverMember;
 
-	private final UserInfoService userInfoService;
-	private final UserInfoRepository userInfoRepository;
 	private final UserAccountService userAccountService;
 	private final UserAccountRepository userAccountRepository;
 
@@ -78,6 +72,8 @@ public class AuthController {
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 
+
+
 	@GetMapping("/sign-up")
 	public String signUpForm(Model model){
 		model.addAttribute("serverAuth",serverAuth);
@@ -111,18 +107,9 @@ public class AuthController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(userId);
 	}
 
-	@PostMapping("/email-validation")
-	public ResponseEntity emailValidation(@RequestBody EmailValidationRequestDto dto) {
-		if (userInfoService.isEmailDuplicated(dto.getEmail())) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).build();
-		} else {
-			return ResponseEntity.status(HttpStatus.OK).build();
-		}
-	}
-
 	@PostMapping("/id-validation")
 	public ResponseEntity idValidation(@RequestBody IdValidationRequestDto dto) {
-		if (userInfoService.isIdDuplicated(dto.getId())) {
+		if (userAccountService.isIdDuplicated(dto.getId())) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
 		} else {
 			return ResponseEntity.status(HttpStatus.OK).build();

@@ -71,7 +71,7 @@
 </html>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script type="text/javascript" th:inline="javascript">
-    let emailRegExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[0-9a-zA-Z]{2,5}$/gi;
+    let emailRegExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[0-9a-zA-Z]{2,5}$/gi;
     let idRegExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*$/gi;
     let nameClassList = document.querySelector('#name').classList;
     let emailClassList = document.querySelector('#email').classList;
@@ -102,30 +102,15 @@
             checkEmailResult(false);
             return;
         }
+        else{
+            checkEmailResult(true);
+        }
 
         let emailValidationRequestDto = JSON.stringify({
             email: email
         });
 
-        $.ajax({
-            url: '/auth/email-validation',
-            type: 'post',
-            dataType: 'json',
-            contentType: 'application/json',
-            data: emailValidationRequestDto,
-            statusCode: {
-                200: function () {
-                    checkEmailResult(true);
-                },
-                409: function () {
-                    checkEmailResult(false);
-                },
-                500: function () {
-                    alert("다시 시도해주세요.");
-                    checkEmailResult(false);
-                }
-            }
-        });
+
 
     }
 

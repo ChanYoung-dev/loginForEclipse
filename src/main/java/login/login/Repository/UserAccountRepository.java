@@ -36,6 +36,11 @@ public class UserAccountRepository {
 		return em.find(UserAccount.class, id);
 	}
 
+	public Boolean existsById(String userId) {
+		String qlString = "select case when (count(u) > 0) then true else false end from UserAccount u where u.userId = :userId";
+		return em.createQuery(qlString, Boolean.class).setParameter("userId", userId).getSingleResult();
+	}
+
 
 
 
