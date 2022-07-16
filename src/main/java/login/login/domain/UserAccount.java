@@ -46,8 +46,13 @@ public class UserAccount {
 		userAccount.userId = userId;
 		userAccount.userPassword= userPassword;
 		userAccount.setUserInfo(userInfo);
-		userAccount.setLoginYN("Y");
+		userAccount.loginYN = "N";
 		return userAccount;
+	}
+
+	public void updateLoginYN(String loginYN) {
+		this.loginYN = loginYN;
+		System.out.println("loginYN = " + loginYN);
 	}
 
 

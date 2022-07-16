@@ -19,7 +19,13 @@ public class UserAccountRepository {
 	private final EntityManager em;
 	
 	public void save(UserAccount userAccount) {
-		em.persist(userAccount);
+		if(userAccount.getUserId()==null){
+			em.persist(userAccount);
+		}
+		else{
+			em.merge(userAccount);
+		}
+
 	}
 
 	public UserAccount findByUserId(String userId){
@@ -29,6 +35,7 @@ public class UserAccountRepository {
 	public UserAccount findUser(Long id) {
 		return em.find(UserAccount.class, id);
 	}
+
 
 
 

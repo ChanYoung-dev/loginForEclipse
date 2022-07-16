@@ -6,7 +6,10 @@ import login.login.Repository.UserAccountRepository;
 import login.login.Repository.UserInfoRepository;
 import login.login.domain.UserAccount;
 import login.login.domain.UserInfo;
+import login.login.domain.UserInfoDto;
 import login.login.dto.*;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -87,6 +90,27 @@ public class AuthController {
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
+	@GetMapping("/user")
+	@ResponseBody
+	public ResponseEntity getUserId(HttpServletRequest request){
+		HttpSession session = request.getSession(false);
+		if (session == null) {
+			System.out.println("세션이없다");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		}
+		UserAccount loginMember = (UserAccount) session.getAttribute("loginMember");
+		if (loginMember == null) {
+			System.out.println("사용자가없다");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		}
+
+		ModelMapper mapper = new ModelMapper();
+		mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+		ResponseUserId userId = mapper.map(loginMember, ResponseUserId.class);
+
+		return ResponseEntity.status(HttpStatus.CREATED).body(userId);
+	}
+
 	@PostMapping("/email-validation")
 	public ResponseEntity emailValidation(@RequestBody EmailValidationRequestDto dto) {
 		if (userInfoService.isEmailDuplicated(dto.getEmail())) {
@@ -108,8 +132,8 @@ public class AuthController {
 	@PostMapping("/logout")
 	@ResponseBody
 	public ResponseEntity logout(@Login UserAccount loginMember, HttpServletRequest request) {
-		loginMember.setLoginYN("N");
 		System.out.println(" reload....");
+		userAccountService.controlLoginYN(loginMember);
 		HttpSession session = request.getSession(false);
 		if (session != null) {
 			session.invalidate();

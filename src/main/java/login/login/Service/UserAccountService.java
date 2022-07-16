@@ -38,12 +38,20 @@ public class UserAccountService {
 			if (!(dto.getPassword().equals(user.getUserPassword()))) {
 				throw new LoginException("이메일과 비밀번호가 올바르지 않습니다.");
 			}
+			user.updateLoginYN("Y");
+			userAccountRepository.save(user);
 			return user;
 		}
 		catch (NoResultException e){
 			throw new LoginException("이메일과 비밀번호가 올바르지 않습니다.");
 		}
+	}
 
+	@Transactional
+	public void controlLoginYN(UserAccount userAccount){
+		userAccount.updateLoginYN("N");
+		userAccountRepository.save(userAccount);
+		System.out.println("Logyn = " + userAccount.getLoginYN());
 	}
 
 

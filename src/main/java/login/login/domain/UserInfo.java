@@ -5,6 +5,8 @@ import javax.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Table(name = "tbl_user_info")
 @Getter
 @Setter
@@ -29,4 +31,6 @@ public class UserInfo {
 		userInfo.email= email;
 		return userInfo;
 	}
+
+
 }
